@@ -1,6 +1,5 @@
-const C='telestrador-v3';
-self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png'])).catch(()=>{}));self.skipWaiting()});
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(n=>n!=C).map(n=>caches.delete(n)))).then(()=>clients.claim())));
+const C='telestrador-v2',A=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(A)));self.skipWaiting()});
+self.addEventListener('activate',e=>e.waitUntil(clients.claim()));
 self.addEventListener('fetch',e=>{if(e.request.method!='GET')return;
-const r=e.request.url.startsWith(self.location.origin)?new Request(e.request.url,{cache:'no-cache'}):e.request;
-e.respondWith(fetch(r).then(n=>{if(n.ok){const c=n.clone();caches.open(C).then(x=>x.put(e.request,c))}return n}).catch(()=>caches.match(e.request)))});
+e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(n=>{if(n.ok&&(e.request.url.startsWith(self.location.origin)||e.request.url.includes('jsdelivr')))caches.open(C).then(c=>c.put(e.request,n.clone()));return n}).catch(()=>r)))});
