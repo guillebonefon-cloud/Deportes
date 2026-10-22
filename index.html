@@ -24,9 +24,9 @@ h1{font-size:30px;letter-spacing:-.5px}#home p{color:var(--mu);line-height:1.5;t
 #code{width:90px;padding:10px;font:inherit;font-size:18px;text-align:center;background:var(--bg);color:var(--tx);border:1px solid var(--ln);border-radius:8px}
 #stat{color:var(--mu)}
 #air{font-weight:700;letter-spacing:.5px}#air.on{background:var(--rd);border-color:var(--rd)}
-#wrap{flex:1;min-height:0;container-type:size;display:grid;place-items:center;padding:6px}
+#wrap{flex:1;min-height:0;display:flex;justify-content:center;align-items:center;padding:6px;overflow:hidden}
 .st{position:relative;aspect-ratio:16/9;overflow:hidden;background:#00b140}
-#pst{width:min(100cqw,100cqh*16/9);outline:1px solid var(--ln)}
+#pst{flex:none;width:320px;outline:1px solid var(--ln)}
 .st video,.st img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .st canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
 .sw{width:44px;border:3px solid transparent}.sw.sel{border-color:#fff}
@@ -170,7 +170,8 @@ function pitch(x,w,h){x.strokeStyle='rgba(255,255,255,.9)';x.lineWidth=3*w/1280;
  x.strokeRect(L,T,R-L,B-T);x.beginPath();x.moveTo(cx,T);x.lineTo(cx,B);x.stroke();x.beginPath();x.arc(cx,cy,h*.15,0,7);x.stroke();
  if(S.bg=='fut'){const pw=w*.15,ph=h*.58,gw=w*.055,gh=h*.27;x.strokeRect(L,cy-ph/2,pw,ph);x.strokeRect(R-pw,cy-ph/2,pw,ph);x.strokeRect(L,cy-gh/2,gw,gh);x.strokeRect(R-gw,cy-gh/2,gw,gh)}
  else{const kw=w*.19,kh=h*.3;x.strokeRect(L,cy-kh/2,kw,kh);x.strokeRect(R-kw,cy-kh/2,kw,kh);x.beginPath();x.arc(L+kw,cy,kh/2,-Math.PI/2,Math.PI/2);x.stroke();x.beginPath();x.arc(R-kw,cy,kh/2,Math.PI/2,Math.PI*1.5);x.stroke()}}
-function loop(){const c=E.c,d=devicePixelRatio||1,w=E.st.clientWidth*d|0,h=E.st.clientHeight*d|0;if(c.width!=w||c.height!=h){c.width=w;c.height=h}
+function loop(){if(role=='panel'){const q=$('#wrap'),a=Math.max(60,Math.min(q.clientWidth-12,(q.clientHeight-12)*16/9));E.st.style.width=a+'px';E.st.style.height=a*9/16+'px'}
+ const c=E.c,d=devicePixelRatio||1,w=E.st.clientWidth*d|0,h=E.st.clientHeight*d|0;if(c.width!=w||c.height!=h){c.width=w;c.height=h}
  const x=E.x;x.clearRect(0,0,w,h);if(S.bg=='fut'||S.bg=='bas')pitch(x,w,h);
  const t=kind=='v'&&S.med?E.v.currentTime:1e9;S.shapes.forEach(s=>shape(x,s,w,h,t));S.live&&shape(x,S.live,w,h,t);requestAnimationFrame(loop)}
 /* Formaciones y alineaciones */
